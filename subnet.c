@@ -30,16 +30,29 @@ int main() {
   scanf("%s", ip);
   printf("Enter curr prefix len:" );
   scanf("%d", &prefix);
-
-  // new prefix len
-newprefix = prefix+1;
-ipint = iptoint(ip);
-
-//calc og subnet mask
-mask = calcsubmask(prefix);
-newmask = calcsubmask(newprefix);
-int hostsub = (1 << (32 - newprefix)) - 2;
-
-// subtract 2 for network and broadcast addresses
-printf("\nnum of subnet:\n");
-printf("num of hosts per subnet: %d\n", hostsub); 
+  
+    // new prefix len
+  newprefix = prefix+1;
+  ipint = iptoint(ip);
+  
+  //calc og subnet mask
+  mask = calcsubmask(prefix);
+  newmask = calcsubmask(newprefix);
+  int hostsub = (1 << (32 - newprefix)) - 2;
+  
+  // subtract 2 for network and broadcast addresses
+  printf("\nnum of subnet:\n");
+  printf("num of hosts per subnet: %d\n", hostsub); 
+  
+  //generate subnets
+  for(int i = 0; i < 2; i++) {
+    unsigned int network = (ipint & mask) | (i << (32 - newprefix));
+    unsigned int broadcast = network | ~newmask;
+    unsigned int first = network+1;
+    unsigned int last = broadcast - 1;
+    
+    printf("\n subnet %d: ", i+1);
+    printf("\n network address: ");
+    inttoip(network,buffer);
+    printf("%s\n", buffer);
+    
